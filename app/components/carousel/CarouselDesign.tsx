@@ -17,30 +17,38 @@ const images: CarouselImage[] = [
 const CrouselDesign = () => {
     return (
         <div id="infoBoxCarousel" className="carousel slide mb-3 d-block d-lg-block" data-bs-ride="carousel">
-            {/* Carousel items go here */}
-            <div className="carousel-inner">
-
-                <div className="carousel">
-                    {images.map(({ id, src, alt }, index) => (
-                        <div key={id} className={`carousel-item${index === 0 ? " active" : ""}`}>
-                            <div
-                                className="bg-white border rounded-4 shadow-sm info-box"
-                                style={{ position: "relative", width: "100%", height: "200px" }}
-                            >
-                                <Image
-                                    src={src}
-                                    alt={alt}
-                                    fill
-                                    style={{ objectFit: "cover", borderRadius: "1rem" }}
-                                    priority={index === 0} // prioritize first image
-                                />
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-            </div>
+  {/* Carousel items go here */}
+  <div className="carousel-inner">
+    <div className="carousel">
+      {images.map(({ id, src, alt }, index) => (
+        <div key={id} className={`carousel-item${index === 0 ? " active" : ""}`}>
+          <div
+            className="bg-white border rounded-4 shadow-sm info-box"
+            style={{ position: "relative", width: "100%", height: "200px" }}
+          >
+            <Image
+              src={src}
+              alt={alt}
+              fill
+              style={{ objectFit: "cover", borderRadius: "1rem" }}
+              priority={index === 0}
+            />
+          </div>
         </div>
+      ))}
+    </div>
+  </div>
+
+  {/* Responsive height adjustment */}
+  <style jsx>{`
+    @media (max-width: 767px) {
+      .info-box {
+        height: 120px !important;
+      }
+    }
+  `}</style>
+</div>
+
 
     )
 }

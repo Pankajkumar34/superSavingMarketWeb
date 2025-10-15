@@ -10,6 +10,7 @@
         <div className="offcanvas-body">
           <ul>
             <li><i className="bi bi-house-door me-2"></i>Home</li>
+            <li><i className="bi bi-person-plus me-2"></i>Register</li>
             <li><i className="bi bi-person me-2"></i>Profile</li>
             <li><i className="bi bi-box-seam me-2"></i>Orders</li>
             <li><i className="bi bi-building me-2"></i>Apply Franchise</li>

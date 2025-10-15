@@ -26,12 +26,22 @@ const NavBar =()=>{
         <div className="d-flex align-items-center justify-content-end">
           <i className="bi bi-bell fs-5 me-3"></i>
 
-          {/* <!-- Sidebar Trigger --> */}
-          <button className="btn p-0 border-0 bg-transparent" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+
+        {/* <!-- 👤 Profile Circle Image --> */}
+          <img src="https://via.placeholder.com/40" 
+            className="rounded-circle me-3 border border-dark" 
+             width="25" height="25"></img>
+
+
+            {/* <!-- Sidebar Trigger --> */}
+          <button className="btn p-0 border-0 bg-transparent d-lg-none" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
             <i className="bi bi-list fs-3"></i>
           </button>
         </div>
       </div>
+
+      
+      
     )
 }
 
