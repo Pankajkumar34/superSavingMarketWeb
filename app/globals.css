@@ -121,6 +121,24 @@
       padding-left: 5px;
     }
 
+    /* Desktop Navbar Styling */
+.navbar {
+  font-family: 'Poppins', sans-serif;
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+
+.navbar .nav-link {
+  color: #333;
+  margin-right: 15px;
+  transition: 0.3s;
+}
+
+.navbar .nav-link:hover {
+  color: #007bff;
+  transform: translateY(-2px);
+}
+
     /* This is the css code of the bootstrap and css it will dynamically show as the product */
      .product-card {
       border: 1px solid #e0e0e0;
@@ -143,6 +161,14 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  padding: 35px;
+}
+
+/* For mobile devices (max-width: 576px) */
+@media (max-width: 576px) {
+  .product-img {
+    padding: 10px;
+  }
 }
 
 .product-img img {
