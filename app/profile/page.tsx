@@ -1,4 +1,4 @@
-import ProfileContainer from "@/container/homeContainer/profileContainer";
+import ProfileContainer from "@/container/profileContainer/profileContainer";
 import React from "react";
 
 const Profile = ()=>{

@@ -1,0 +1,67 @@
+ .card-custom {
+      width: 480px;
+      height: 150px;
+      background: linear-gradient(135deg, #a8e063, #56ab2f);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      padding: 20px 25px;
+      color: #000;
+      position: relative;
+    }
+
+    .top-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: contain;
+    }
+
+    .flag {
+      width: 60px;
+    }
+
+    .photo-box {
+      width: 110px;
+      height: 130px;
+      border: 1px solid #000;
+      margin-right: 20px;
+      background-color: rgba(255,255,255,0.3);
+    }
+
+    .details {
+      font-size: 17px;
+      line-height: 1.7;
+      font-weight: 500;
+    }
+
+    .bottom-section {
+      border-top: 1px solid #000;
+      margin-top: 15px;
+      padding-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 15px;
+    }
+
+    .bottom-section i {
+      margin-right: 6px;
+    }
+
+    .title {
+      text-align: center;
+      font-weight: 600;
+      font-size: 20px;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 13px;
+      margin-top: -5px;
+    }
