@@ -23,7 +23,7 @@ const SavingCard: React.FC = () => {
                                     <Image src={session?.user?.image || Userimg}
                                     alt="Profile Photo"
                                     className=" shadow-sm"
-                                     style={{width:"100px", height:"120px", objectFit:"cover"}}  width="60" height="60"/></div>
+                                     style={{width:"100%", height:"100%", objectFit:"cover"}}  width="60" height="60"/></div>
                                 <div className="details">
                                     <div><b>Name:</b> {session?.user?.name}</div>
                                     <div><b>Village:</b> Chaipur</div>

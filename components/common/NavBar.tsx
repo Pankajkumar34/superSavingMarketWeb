@@ -27,8 +27,8 @@ const NavBar = () => {
 
           {/* <!-- This is the dynamics of teh  user image but in by defould here will be market logo --> */}
           <Image src={Logo} alt="Profile"
-            className="rounded-circle me-3 border border-dark"
-            width="60" height="60" />
+            className="rounded-circle me-3"
+            width="45" height="45" />
 
         </div>
 
