@@ -10,6 +10,7 @@ import SideBarMenus from "@/components/common/SideBarMenus";
 import NavBar from "@/components/common/NavBar";
 import Wrapper from "@/container/Wrapper";
 import { AuthProvider } from "@/lib/authProvider";
+import Head from "next/head";
 
 
 
@@ -39,7 +40,10 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+    <Head>
+              <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
 
+    </Head>
       <body className={`${geistSans.variable} ${geistMono.variable} "bg-light"`}>
 
         <AuthProvider>

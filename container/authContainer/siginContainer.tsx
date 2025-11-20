@@ -23,7 +23,7 @@ const SiginContainer: React.FC = () => {
   ];
 const socialLoginHandler=async (e: Event, provider: string) => {
     e.preventDefault()
-    signIn(provider, { callbackUrl: "/" });
+    signIn(provider, { callbackUrl: "/complete-profile" });
   }
   
   const socialCredLogin=async(e: Event, provider: string) => {

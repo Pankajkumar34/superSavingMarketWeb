@@ -9,7 +9,7 @@ const SideBarMenus = () => {
   const user = session?.user;
 
   const handleLogout = async () => {
-    await signOut({callbackUrl:"/"}); 
+    await signOut({ callbackUrl: "/" });
     window.location.reload();
   };
   return (
@@ -80,25 +80,39 @@ const SideBarMenus = () => {
           <div className="offcanvas-body">
             <ul className="list-unstyled">
               <li>
-                <i className="bi bi-house-door me-2"></i>Home
+                <Link href="/" className="nav-link">
+                  <i className="bi bi-house-door me-2"></i>Home
+                </Link>
               </li>
               <li>
-                <i className="bi bi-person-plus me-2"></i>Register
+                <Link href="/signup" className="nav-link">
+                  <i className="bi bi-person-plus me-2"></i>Register
+                </Link>
               </li>
               <li>
-                <i className="bi bi-person me-2"></i>Profile
+                <Link href="/profile" className="nav-link">
+                  <i className="bi bi-person me-2"></i>Profile
+                </Link>
               </li>
               <li>
-                <i className="bi bi-box-seam me-2"></i>Orders
+                <Link href="/orders" className="nav-link">
+                  <i className="bi bi-box-seam me-2"></i>Orders
+                </Link>
               </li>
               <li>
-                <i className="bi bi-building me-2"></i>Apply Franchise
+                <Link href="/orders" className="nav-link">
+                  <i className="bi bi-building me-2"></i>Apply Franchise
+                </Link>
               </li>
               <li>
-                <i className="bi bi-gear me-2"></i>Settings
+                <Link href="/orders" className="nav-link">
+                  <i className="bi bi-gear me-2"></i>Settings
+                </Link>
               </li>
               <li>
-                <i className="bi bi-info-circle me-2"></i>About Us
+                <Link href="/orders" className="nav-link">
+                  <i className="bi bi-info-circle me-2"></i>About Us
+                </Link>
               </li>
               <li className="text-danger">
                 <i className="bi bi-box-arrow-right me-2"></i>Logout

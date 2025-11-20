@@ -1,4 +1,4 @@
-import SignupContainer from "@/container/signupContainer";
+import SignupContainer from "@/container/authContainer/signupContainer";
 import React from "react";
 
 export default function SiginContainer() {

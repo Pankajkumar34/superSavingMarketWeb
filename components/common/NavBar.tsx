@@ -5,6 +5,7 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { Logo, Userimg } from "../assetsImport/allAssets";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 const NavBar = () => {
   const [userData, setUserData] = React.useState(null);
   const { data: session, status } = useSession();
@@ -26,9 +27,11 @@ const NavBar = () => {
         <div className="d-flex align-items-center">
 
           {/* <!-- This is the dynamics of teh  user image but in by defould here will be market logo --> */}
+         <Link href="/">
           <Image src={Logo} alt="Profile"
-            className="rounded-circle me-3"
+            className="rounded-circle me-3 border border-dark"
             width="45" height="45" />
+         </Link>
 
         </div>
 
@@ -39,6 +42,7 @@ const NavBar = () => {
 
           {/* <!-- 👤 Profile Circle Image --> */}
           {user ? (
+            <Link href="/profile">
             <Image
               src={session?.user.image || Userimg}
               alt="Profile"
@@ -46,6 +50,7 @@ const NavBar = () => {
               width={40}
               height={40}
             />
+            </Link>
           ) : (
             <button type="button" onClick={loginHandle}
               className="btn btn-primary"
