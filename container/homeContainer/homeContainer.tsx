@@ -48,7 +48,6 @@ const productsData: Product[] = [
 ];
 const HomeContainer = () => {
   const { data: session } = useSession();
-  console.log(session,"datadata")
   return (
     <div className="mx-auto inner-dashboard">
       <CrouselDesign />

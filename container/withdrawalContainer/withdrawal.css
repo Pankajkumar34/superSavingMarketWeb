@@ -1,0 +1,8 @@
+.table thead th {
+    font-weight: 700;
+    font-size: .9rem;
+}
+
+.table tbody td {
+    font-size: .92rem;
+}
