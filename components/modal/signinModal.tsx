@@ -32,7 +32,7 @@ const SigninModal: React.FC = () => {
 
     const handleClose = () => {
         setShowModal(false);
-        sessionStorage.setItem("loginModalSeen", "true"); // store that user has closed it
+        sessionStorage.setItem("loginModalSeen", "true"); 
     };
 
     if (!showModal) return null;

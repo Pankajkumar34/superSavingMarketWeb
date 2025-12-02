@@ -5,30 +5,93 @@ import Image from "next/image";
 import { fbImg, GoogleImg, Logo } from "@/components/assetsImport/allAssets";
 import SocialButton from "@/components/social/socialButton";
 import { signIn } from "next-auth/react";
-
+import { toast } from "react-toastify";
+import Spinner from "@/components/loader/spinner";
+import axiosInstanceConfig from "@/utils/axios.config";
+import { AxiosResponse } from "axios";
+import { useRouter } from "next/navigation";
+import { ApiResponse } from "@/types/auth";
+import { useContext } from "react";
+import { useAppSelector } from "@/utils/hooks/hooks";
 const SignupContainer: React.FC = () => {
+    const { user } = useAppSelector(state => state.auth)
     type CarouselImage = {
         id: number;
         src: string;
         alt: string;
     };
-
     const images: CarouselImage[] = [
         { id: 1, src: "/slider/sl1.jpg", alt: "CEO Image 1" },
         { id: 2, src: "/slider/sl2.jpg", alt: "CEO Image 2" },
         { id: 3, src: "/slider/sl3.jpg", alt: "CEO Image 3" },
     ];
-
+    const router = useRouter()
     const [otpSent, setOtpSent] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [OTP, setOTP] = useState("123456")
+    const [phonenumber, setPhonenumber] = useState({ phoneNumber: "", countryCode: "+91" });
+    let isClicked = false;
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setPhonenumber((prevState) => ({
+            ...prevState,
+            [name]: value.replace(/\D/g, ""),
+        }));
+    }
 
-    const handleSendOtp = (e: React.FormEvent) => {
+    const handleSendOtp = async (e: React.FormEvent) => {
         e.preventDefault();
-        setOtpSent(true);
+        if (isClicked) return;
+        isClicked = true;
+
+        try {
+            if (!phonenumber.phoneNumber) return toast.error("Phonenumber is required")
+            setLoading(true)
+            const response: AxiosResponse<ApiResponse> = await axiosInstanceConfig.post("/send-otp", { countryCode: phonenumber.countryCode, phoneNumber: phonenumber.phoneNumber });
+            console.log("OTP sent response:", response);
+            if (response.status === 200) {
+                toast.success(response?.data?.message)
+                setLoading(false)
+                setOtpSent(true);
+            }
+
+
+        } catch (error) {
+            console.error("Error sending OTP:", error);
+        } finally {
+            setLoading(false);
+            setTimeout(() => (isClicked = false), 1500);
+        }
     };
 
-    const handleVerifyOtp = (e: React.FormEvent) => {
+    const handleVerifyOtp = async (e: React.FormEvent) => {
         e.preventDefault();
-        alert("Signup successful (mock)!");
+        if (isClicked) return;
+        isClicked = true;
+
+        try {
+            if (!phonenumber.phoneNumber) return toast.error("Phonenumber is required")
+            setLoading(true)
+            const response: AxiosResponse<ApiResponse> = await axiosInstanceConfig.post("/verify-otp", { phoneNumber: phonenumber.phoneNumber, otp: OTP });
+            console.log("OTP verifed response:", response);
+            if (response.status === 200) {
+                toast.success(response?.data?.message)
+                setLoading(false)
+                setOtpSent(true);
+                router.push("/complete-profile")
+                localStorage.setItem("id", response?.data?.body?._id)
+                localStorage.setItem("user_details", JSON.stringify(response?.data?.body))
+            }
+
+
+        } catch (error: any) {
+            const msg = error?.response?.data?.message
+            toast.error(msg)
+            console.error("Error sending OTP:", error);
+        } finally {
+            setLoading(false);
+            setTimeout(() => (isClicked = false), 1500);
+        }
     };
 
     return (
@@ -61,39 +124,7 @@ const SignupContainer: React.FC = () => {
                             className="signup-form"
                             onSubmit={otpSent ? handleVerifyOtp : handleSendOtp}
                         >
-                            {/* <div className="form-group mb-3">
-                <i className="fa fa-user me-2" style={{ fontSize: "12px" }}></i>
-                <label
-                  htmlFor="username"
-                  className="text-uppercase"
-                  style={{ fontFamily: "sans-serif", fontSize: "12px" }}
-                >
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  className="form-control mt-1"
-                  id="username"
-                  placeholder="Enter your name"
-                />
-              </div>
 
-              <div className="form-group mb-3">
-                <i className="fa fa-envelope me-2" style={{ fontSize: "12px" }}></i>
-                <label
-                  htmlFor="email"
-                  className="text-uppercase"
-                  style={{ fontFamily: "sans-serif", fontSize: "12px" }}
-                >
-                  Email
-                </label>
-                <input
-                  type="email"
-                  className="form-control mt-1"
-                  id="email"
-                  placeholder="Enter your email"
-                />
-              </div> */}
 
                             <div className="form-group mb-3">
                                 <i className="fa fa-phone me-2" style={{ fontSize: "12px" }}></i>
@@ -105,7 +136,13 @@ const SignupContainer: React.FC = () => {
                                     Mobile Number
                                 </label>
                                 <input
-                                    type="tel"
+                                    type="text"
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
+                                    maxLength={10}
+                                    name="phoneNumber"
+                                    value={phonenumber.phoneNumber}
+                                    onChange={handleChange}
                                     className="form-control mt-1"
                                     id="mobile"
                                     placeholder="Enter your mobile number"
@@ -127,6 +164,8 @@ const SignupContainer: React.FC = () => {
                                         Enter OTP
                                     </label>
                                     <input
+                                        value={OTP}
+                                        onChange={(e) => setOTP(e.target.value)}
                                         type="text"
                                         className="form-control mt-1"
                                         id="otp"
@@ -135,12 +174,19 @@ const SignupContainer: React.FC = () => {
                                 </div>
                             )}
 
-                            <button
+                            {otpSent ? <button
                                 type="submit"
-                                className={`btn ${otpSent ? "btn-success" : "btn-danger"
-                                    } w-100 mt-3 rounded-pill`}
+                                className={`btn ${otpSent ? "btn-success" : "btn-danger"} w-100 mt-3 rounded-pill`} onClick={handleVerifyOtp}
                             >
-                                {otpSent ? "Verify & Sign Up" : "Send OTP"}
+                                Verify & Sign Up
+                            </button> :
+                                <button type="submit"
+                                    className={`btn ${otpSent ? "btn-success" : "btn-danger"} w-100 mt-3 rounded-pill`} onClick={handleSendOtp} >{loading ? <Spinner /> : "Send OTP"}</button>}
+                            <button
+                                type="button"
+                                className={"btn-danger btn  w-100 mt-3 rounded-pill"}
+                            >
+                                Cancle
                             </button>
                         </form>
 
@@ -155,17 +201,17 @@ const SignupContainer: React.FC = () => {
                             </small>
 
                         </div>
-                      
+
                         <SocialButton
                             icon={GoogleImg}
                             label="Continue with Google"
-                            onClick={()=>signIn("google", { callbackUrl: "/" })}
+                            onClick={() => signIn("google", { callbackUrl: "/" })}
                         />
 
                         <SocialButton
                             icon={fbImg}
                             label="Continue with Facebook"
-                            // onClick={signIn("facebook", { callbackUrl: "/" })}
+                        // onClick={signIn("facebook", { callbackUrl: "/" })}
                         />
 
                         <div className="social-media-icons d-flex justify-content-center">

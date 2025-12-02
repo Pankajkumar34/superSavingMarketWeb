@@ -1,13 +1,13 @@
 "use client";
 import React from "react";
 import CompleteProfileContainer from "@/container/authContainer/completeProfileContainer";
-import { Steps1 } from "@/container/authContainer/steps";
-const BasicDetails = () => {
+import {  Steps2 } from "@/container/authContainer/steps";
+const ContacDetails = () => {
     return (
         <>
-            <Steps1 />
+            <Steps2 />
         </>
     )
 }
 
-export default BasicDetails;
+export default ContacDetails;

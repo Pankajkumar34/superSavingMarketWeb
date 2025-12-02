@@ -5,16 +5,19 @@ import Image from "next/image";
 import React, { useEffect } from "react";
 import { Logo, Userimg } from "../assetsImport/allAssets";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
 import Link from "next/link";
+import { useAppSelector } from "@/utils/hooks/hooks";
 const NavBar = () => {
+  const {user,isLogged,hasRefreshToken}=useAppSelector(state=>state.auth)
   const [userData, setUserData] = React.useState(null);
   const { data: session, status } = useSession();
   const router = useRouter();
   if (status === "loading") {
     return null;
   }
-
-  const user = session?.user;
+console.log(user,isLogged,hasRefreshToken,"user,isLogged,hasRefreshToken==")
+  // const user = session?.user;
   const loginHandle = () => {
     router.push('/login')
   }
@@ -41,7 +44,7 @@ const NavBar = () => {
 
 
           {/* <!-- 👤 Profile Circle Image --> */}
-          {user ? (
+          {hasRefreshToken ? (
             <Link href="/profile">
             <Image
               src={session?.user.image || Userimg}

@@ -25,10 +25,12 @@ export default function ProfileContainer() {
                 <h2 className="fw-bold text-danger" style={textStyle}>Super Saving Market</h2>
                 <p className="text-muted mb-0">More Shopping, More Saving</p>
             </div>
+          
 
             {/* <!-- Primary Details --> */}
             <div className="d-flex justify-content-center" style={{ fontFamily: "Nunito Sans, sans-serif" }}>
                 <div className="card shadow-sm mb-4 w-100" style={{ maxWidth: " 700px" }}>
+                      <button type="button" onClick={()=>router.push("/complete-profile")}>Complete Profile</button>
                     <div className="card-body">
                         <h5 className="card-title text-primary fw-bold mb-3 text-center">Primary Details</h5>
 
@@ -49,6 +51,7 @@ export default function ProfileContainer() {
                                 <p className="mb-1"><strong>Account Number:</strong> XXXXXXXXXXXX</p>
                                 <p className="mb-0"><strong>Mobile Number:</strong> +91 7081023366</p>
                             </div>
+                            
 
                         </div>
                     </div>

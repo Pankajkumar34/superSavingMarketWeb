@@ -4,9 +4,8 @@ import type { NextRequest } from "next/server";
 
 export function middleware(req: NextRequest) {
     const token =
-        req.cookies.get("next-auth.session-token")?.value ??
-        req.cookies.get("__Secure-next-auth.session-token")?.value;
-
+        req.cookies.get("refreshToken")?.value 
+       
     const path = req.nextUrl.pathname;
 
     if ((path.startsWith("/login") || path.startsWith("/signup")) && token) {

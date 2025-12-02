@@ -1,0 +1,33 @@
+.spinnerContainer {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+.circle-svg {
+  width: 50px;
+  height: 50px;
+  --radius: 30;
+  --circumference: calc(2 * 3.14 * var(--radius));
+}
+
+.circle-svg circle {
+  stroke: rgb(214, 193, 193);
+  stroke-width: 4;
+  fill: transparent;
+  transform-origin: center;
+  /* stroke-dasharray: ; */
+  animation: spinner 2s ease-out infinite;
+}
+
+@keyframes spinner {
+  from {
+    stroke-dashoffset: var(--circumference);
+    stroke: red;
+    transform: rotateZ(0deg)
+  }
+  to {
+    stroke-dashoffset: calc(var(--circumference) * -1);
+    stroke: green;
+    transform: rotateZ(720deg)
+  }
+}

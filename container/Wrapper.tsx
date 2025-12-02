@@ -5,7 +5,7 @@ import React from "react";
 
 const Wrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const pathname = usePathname();
-  const hideFooter = pathname === "/login" || pathname === "/signin";
+  const hideFooter = pathname === "/login" || pathname === "/signup";
 
   return !hideFooter ? <>{children}</> : null;
 };

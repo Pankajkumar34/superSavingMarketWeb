@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 // import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import 'bootstrap-icons/font/bootstrap-icons.css';
 import "./globals.css";
 import CarouselInit from "@/components/carousel/CarouselInit ";
 import Footer from "@/components/common/Footer";
@@ -11,6 +10,10 @@ import NavBar from "@/components/common/NavBar";
 import Wrapper from "@/container/Wrapper";
 import { AuthProvider } from "@/lib/authProvider";
 import Head from "next/head";
+import { ToastContainer } from "react-toastify";
+import SessionExpiredPopup from "@/components/modal/sessionExpiredPopup";
+import Providers from "@/lib/redux/reduxProvider";
+import AuthInitializer from "@/lib/AuthInitializer";
 
 
 
@@ -40,28 +43,32 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-    <Head>
-              <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+      <Head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    </Head>
+      </Head>
       <body className={`${geistSans.variable} ${geistMono.variable} "bg-light"`}>
+        <Providers>
+          <AuthProvider>
+            
+              <div className="dashboard-container container-fluid py-3">
+                <Wrapper>
+                  <NavBar />
+                  <SideBarMenus />
+                </Wrapper>
+                <AuthInitializer/>
+                {children}
+                <SessionExpiredPopup />
+                <Wrapper>
+                  <Footer />
+                </Wrapper>
+              </div>
 
-        <AuthProvider>
-          <div className="dashboard-container container-fluid py-3">
-            <Wrapper>
-              <NavBar />
-              <SideBarMenus />
-            </Wrapper>
-
-            {children}
-
-            <Wrapper>
-              <Footer />
-            </Wrapper>
-          </div>
-
-          <CarouselInit />
-        </AuthProvider>
+              <CarouselInit />
+            
+          </AuthProvider>
+        </Providers>
+        <ToastContainer hideProgressBar={true} />
 
 
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
