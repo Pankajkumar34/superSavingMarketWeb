@@ -32,6 +32,7 @@ const ProfilePicUpload = () => {
         try {
             // const response = 
             
+            
         } catch (error) {
             console.log("file delete error", error)
         }
