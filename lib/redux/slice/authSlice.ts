@@ -1,6 +1,6 @@
 // store/auth/authSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { loadUserThunk } from "@/lib/thunkApis/authThunks";
+import { loadUserThunk, logoutThunk } from "@/lib/thunkApis/authThunks";
 
 interface AuthState {
   isLogged: boolean;
@@ -42,6 +42,11 @@ const authSlice = createSlice({
       state.isLogged = isLogged;
       state.user = user;
     });
+     builder.addCase(logoutThunk.fulfilled, (state) => {
+    state.isLogged = false;
+    state.user = null;
+    state.hasRefreshToken = false;
+  });
   },
 });
 

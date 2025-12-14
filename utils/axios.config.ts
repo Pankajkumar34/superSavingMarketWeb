@@ -15,7 +15,7 @@ import axios from "axios";
 
 
 const axiosInstanceConfig = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000/api/auth",
+    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:4000/api",
     withCredentials: true, // send cookies
 });
 
@@ -58,7 +58,7 @@ axiosInstanceConfig.interceptors.response.use(
             isRefreshing = true;
 
             try {
-                const res = await axiosInstanceConfig.post("/refresh-token");
+                const res = await axiosInstanceConfig.post("/auth/refresh-token");
 
                 isRefreshing = false;
                 processQueue(null, res.data.accessToken);

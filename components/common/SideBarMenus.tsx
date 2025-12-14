@@ -2,16 +2,29 @@
 import React from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
+import { useAppDispatch, useAppSelector } from "@/utils/hooks/hooks";
+import { logoutThunk } from "@/lib/thunkApis/authThunks";
+import { useRouter } from "next/navigation";
 
 const SideBarMenus = () => {
-  const { data: session, status } = useSession();
-  if (status === "loading") return null;
-  const user = session?.user;
-
+  const { user, isLogged, hasRefreshToken } = useAppSelector(state => state.auth)
+  const dispatch = useAppDispatch()
+  const router = useRouter()
   const handleLogout = async () => {
-    await signOut({ callbackUrl: "/" });
-    window.location.reload();
+    try {
+      const response = await dispatch(logoutThunk()).unwrap();
+      console.log(response, "responseresponseresponse")
+      if (response.success) {
+        router.push("/login");
+      }
+    } catch (error) {
+      console.log(error, "==>")
+    }
+    // await signOut({ callbackUrl: "/" });
+    // window.location.reload();
   };
+
+
   return (
     <>
       <div className="mx-auto inner-dashboard">

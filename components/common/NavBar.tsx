@@ -7,20 +7,23 @@ import { Logo, Userimg } from "../assetsImport/allAssets";
 import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import Link from "next/link";
-import { useAppSelector } from "@/utils/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/utils/hooks/hooks";
+import { logoutThunk } from "@/lib/thunkApis/authThunks";
 const NavBar = () => {
-  const {user,isLogged,hasRefreshToken}=useAppSelector(state=>state.auth)
+      const {user,isLogged,hasRefreshToken}=useAppSelector(state=>state.auth)
+  
   const [userData, setUserData] = React.useState(null);
   const { data: session, status } = useSession();
   const router = useRouter();
   if (status === "loading") {
     return null;
   }
-console.log(user,isLogged,hasRefreshToken,"user,isLogged,hasRefreshToken==")
   // const user = session?.user;
   const loginHandle = () => {
     router.push('/login')
   }
+  
+
 
   return (
     <div className="mx-auto inner-dashboard">

@@ -272,7 +272,7 @@ const SiginContainer: React.FC = () => {
         try {
             if (!phonenumber.phoneNumber) return toast.error("Phonenumber is required")
             setLoading(true)
-            const response: AxiosResponse<ApiResponse> = await axiosInstanceConfig.post("/send-otp", { countryCode: phonenumber.countryCode, phoneNumber: phonenumber.phoneNumber });
+            const response: AxiosResponse<ApiResponse> = await axiosInstanceConfig.post("/auth/send-otp", { countryCode: phonenumber.countryCode, phoneNumber: phonenumber.phoneNumber });
             console.log("OTP sent response:", response);
             if (response.status === 200) {
                 toast.success(response?.data?.message)
@@ -297,7 +297,7 @@ const SiginContainer: React.FC = () => {
         try {
             if (!phonenumber.phoneNumber) return toast.error("Phonenumber is required")
             setLoading(true)
-            const response: AxiosResponse<ApiResponse> = await axiosInstanceConfig.post("/verify-otp", { phoneNumber: phonenumber.phoneNumber, otp: OTP });
+            const response: AxiosResponse<ApiResponse> = await axiosInstanceConfig.post("/auth/verify-otp", { phoneNumber: phonenumber.phoneNumber, otp: OTP });
             console.log("OTP verifed response:", response);
             if (response.status === 200) {
                 toast.success(response?.data?.message)
@@ -407,12 +407,12 @@ const SiginContainer: React.FC = () => {
                             </button> :
                                 <button type="submit"
                                     className={`btn ${otpSent ? "btn-success" : "btn-danger"} w-100 mt-3 rounded-pill`} onClick={handleSendOtp} >{loading ? <Spinner /> : "Send OTP"}</button>}
-                            <button
+                            {otpSent && <button
                                 type="button"
                                 className={"btn-danger btn  w-100 mt-3 rounded-pill"}
                             >
                                 Cancle
-                            </button>
+                            </button>}
                         </form>
 
                         {/* Social Login Section */}

@@ -47,7 +47,7 @@ const SignupContainer: React.FC = () => {
         try {
             if (!phonenumber.phoneNumber) return toast.error("Phonenumber is required")
             setLoading(true)
-            const response: AxiosResponse<ApiResponse> = await axiosInstanceConfig.post("/send-otp", { countryCode: phonenumber.countryCode, phoneNumber: phonenumber.phoneNumber });
+            const response: AxiosResponse<ApiResponse> = await axiosInstanceConfig.post("/auth/send-otp", { countryCode: phonenumber.countryCode, phoneNumber: phonenumber.phoneNumber });
             console.log("OTP sent response:", response);
             if (response.status === 200) {
                 toast.success(response?.data?.message)
@@ -72,7 +72,7 @@ const SignupContainer: React.FC = () => {
         try {
             if (!phonenumber.phoneNumber) return toast.error("Phonenumber is required")
             setLoading(true)
-            const response: AxiosResponse<ApiResponse> = await axiosInstanceConfig.post("/verify-otp", { phoneNumber: phonenumber.phoneNumber, otp: OTP });
+            const response: AxiosResponse<ApiResponse> = await axiosInstanceConfig.post("/auth/verify-otp", { phoneNumber: phonenumber.phoneNumber, otp: OTP });
             console.log("OTP verifed response:", response);
             if (response.status === 200) {
                 toast.success(response?.data?.message)

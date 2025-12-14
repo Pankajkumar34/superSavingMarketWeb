@@ -3,8 +3,10 @@ import { useRouter } from "next/navigation";
 import axiosInstanceConfig from "@/utils/axios.config";
 import { useContext } from "react";
 import { useAppDispatch, useAppSelector } from "@/utils/hooks/hooks";
-import { loadUserThunk } from "@/lib/thunkApis/authThunks";
+import { fileUploadThunk, loadUserThunk } from "@/lib/thunkApis/authThunks";
 import { toast } from "react-toastify";
+import ProfilePicUpload from "@/components/fileuploadHtml/fileUpload";
+
 interface StepsProps {
   nextStep: (n: number) => void;
 
@@ -26,6 +28,7 @@ export const Steps1 = () => {
   // const { user } = useContext(authContext)
 
   const {user,sessionExpired} = useAppSelector(state=>state.auth)
+   const {fileUrl} = useAppSelector(state=>state.fileUpload)
   const dispatch=useAppDispatch()
   const router = useRouter()
  const [stap1, setStap1] = useState({
@@ -42,7 +45,7 @@ export const Steps1 = () => {
   const addBasicDetailsHandle = async () => {
     try {
       const userId = localStorage.getItem("id")
-      const response = await axiosInstanceConfig.post(`/complete-profile/${userId}`, stap1)
+      const response = await axiosInstanceConfig.post(`/auth/complete-profile/${userId}`, stap1)
       console.log(response, "responseresponse")
       if (response.status == 200) {
         router.push("/complete-profile/contact-details")
@@ -68,16 +71,36 @@ useEffect(() => {
   }));
 }, [user]);
 
-console.log("===>",user)
+const handleFileChange = async(e: React.ChangeEvent<HTMLInputElement>) => {
+  const files = e.target.files;
+  console.log("file",files)
+  
+  if (!files && files?.length === 0) return;
+    const formData = new FormData()
+ for (let i = 0; i < files.length; i++) {
+    formData.append("file", files[i])
+  }
+  const destination ="1"
+  const formPayload = { formData, destination }
+  try {
+    const fileData = await dispatch(fileUploadThunk(formPayload)) as unknown as Promise<{ url: string }>
+    console.log("fileData",fileData)
+  } catch (error) {
+    console.log("file upload error",error)
+
+  }
+}
+console.log("fileUrlfileUrlfileUrl",fileUrl)
   return (
     <>
       <div className="step-card">
         <h4 className="mb-3 text-primary fw-bold">Step 1: Basic Details</h4>
 
-        <div className="mb-3">
+<ProfilePicUpload/>
+        {/* <div className="mb-3">
           <label className="form-label fw-bold">Upload Photo</label>
-          <input type="file" className="form-control" />
-        </div>
+          <input type="file" className="form-control" multiple onChange={handleFileChange} />
+        </div> */}
 
         <div className="row">
           <div className="col-md-6 mb-3">
@@ -103,7 +126,7 @@ console.log("===>",user)
 
           <div className="col-md-6 mb-3">
             <label className="form-label fw-bold">Verify Mobile Number</label>
-            <input type="text" className="form-control" placeholder="Enter OTP" name="phoneNumber" value={stap1.phoneNumber}/>
+            <input type="text" className="form-control" placeholder="Enter OTP" name="phoneNumber" value={stap1.phoneNumber || "9999"}/>
           </div>
         </div>
 
@@ -137,7 +160,7 @@ export const Steps2 = () => {
     try {
       const userId = localStorage.getItem("id")
     
-      const response = await axiosInstanceConfig.post(`/complete-profile/${userId}`, {address:stap2,location:{
+      const response = await axiosInstanceConfig.post(`/auth/complete-profile/${userId}`, {address:stap2,location:{
         locationName:"Chainpur",
         coordinates:[77.2090,28.6139]   //[lang, lat]
       }})
@@ -248,7 +271,7 @@ export const Steps3 = () => {
       } 
       const userId = localStorage.getItem("id")
     
-      const response = await axiosInstanceConfig.post(`/complete-profile/${userId}`, {isTerm:isTerm})
+      const response = await axiosInstanceConfig.post(`/auth/complete-profile/${userId}`, {isTerm:isTerm})
       console.log(response, "responseresponse")
       if (response.status == 200) {
         router.push("/profile")
