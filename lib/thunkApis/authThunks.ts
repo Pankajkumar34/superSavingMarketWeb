@@ -30,8 +30,7 @@ export const loadUserThunk = createAsyncThunk(
 
 export const fileUploadThunk = createAsyncThunk("type/uploadFile", async (formPayload: any, { rejectWithValue }) => {
   try {
-    // const formData = new FormData();
-    // formData.append("file", file);
+
     const response = await axiosInstanceConfig.post(`/upload?destination=${formPayload.destination}`, formPayload.formData, {
       headers: {
         "Content-Type": "multipart/form-data"
@@ -49,6 +48,16 @@ export const fileUploadThunk = createAsyncThunk("type/uploadFile", async (formPa
   }
 })
 
+export const getProfile= createAsyncThunk("auth/getProfile", async (_, {rejectWithValue}) => {
+
+  try {
+    const res = await axiosInstanceConfig.get("/auth/profile");
+    return res.data?.body;
+  }
+  catch (err: any) {
+    return rejectWithValue(err.response?.data);
+  }
+});
 export const logoutThunk = createAsyncThunk(
   "auth/logout",
   async (_, thunkAPI) => {

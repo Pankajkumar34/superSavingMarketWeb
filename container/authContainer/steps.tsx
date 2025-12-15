@@ -16,7 +16,7 @@ interface StepsProps3 {
   nextStep: (step: number, data: {
     firtName: string;
     lastName: string;
-    profilePic: string;
+    profileImage: string;
     phoneNumber: string;
   }) => void;
   familyList: { mobile: string }[];
@@ -27,17 +27,18 @@ interface StepsProps3 {
 export const Steps1 = () => {
   // const { user } = useContext(authContext)
 
-  const {user,sessionExpired} = useAppSelector(state=>state.auth)
-   const {fileUrl} = useAppSelector(state=>state.fileUpload)
-  const dispatch=useAppDispatch()
+  const { user, sessionExpired } = useAppSelector(state => state.auth)
+  const { fileUrl }:any = useAppSelector(state => state.fileUpload)
+  const dispatch = useAppDispatch()
   const router = useRouter()
- const [stap1, setStap1] = useState({
-  firstName: user?.firstName || "",
-  lastName: user?.lastName || "",
-  email: user?.email || "",
-  profilePic: user?.profilePic || "http//image.com",
-  phoneNumber: user?.phoneNumber || "",
-})
+  const [stap1, setStap1] = useState({
+    firstName: user?.firstName || "",
+    lastName: user?.lastName || "",
+    email: user?.email || "",
+    profileImage: user?.profileImage || fileUrl?.length>0 && fileUrl[0]?.url,
+    phoneNumber: user?.phoneNumber || "",
+    authSteps: 2
+  })
   const handleChange = (e: any) => {
     const { value, name } = e.target
     setStap1((pre) => ({ ...pre, [name]: value }))
@@ -54,49 +55,57 @@ export const Steps1 = () => {
       console.log(error, "==>")
     }
   }
-useEffect(() => {
-  dispatch(loadUserThunk());
-}, [dispatch]);
+  useEffect(() => {
+    dispatch(loadUserThunk());
+  }, [dispatch]);
+  useEffect(() => {
+  if (fileUrl?.length > 0) {
+    setStap1(prev => ({
+      ...prev,
+      profileImage: fileUrl[0]?.url
+    }));
+  }
+}, [fileUrl]);
 
-useEffect(() => {
-  if (!user) return;
+  useEffect(() => {
+    if (!user) return;
 
-  setStap1((prev) => ({
-    ...prev,
-    firstName: user.firstName ?? prev.firstName,
-    lastName: user.lastName ?? prev.lastName,
-    email: user.email ?? prev.email,
-    profilePic: user.profilePic ?? prev.profilePic,
-    phoneNumber: user.phoneNumber ?? prev.phoneNumber,
-  }));
-}, [user]);
+    setStap1((prev) => ({
+      ...prev,
+      firstName: user.firstName ?? prev.firstName,
+      lastName: user.lastName ?? prev.lastName,
+      email: user.email ?? prev.email,
+      profileImage: user.profileImage ?? prev.profileImage,
+      phoneNumber: user.phoneNumber ?? prev.phoneNumber,
+    }));
+  }, [user]);
 
-const handleFileChange = async(e: React.ChangeEvent<HTMLInputElement>) => {
-  const files = e.target.files;
-  console.log("file",files)
-  
-  if (!files && files?.length === 0) return;
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    console.log("file", files)
+
+    if (!files && files?.length === 0) return;
     const formData = new FormData()
- for (let i = 0; i < files.length; i++) {
-    formData.append("file", files[i])
-  }
-  const destination ="1"
-  const formPayload = { formData, destination }
-  try {
-    const fileData = await dispatch(fileUploadThunk(formPayload)) as unknown as Promise<{ url: string }>
-    console.log("fileData",fileData)
-  } catch (error) {
-    console.log("file upload error",error)
+    for (let i = 0; i < files.length; i++) {
+      formData.append("file", files[i])
+    }
+    const destination = "1"
+    const formPayload = { formData, destination }
+    try {
+      const fileData = await dispatch(fileUploadThunk(formPayload)) as unknown as Promise<{ url: string }>
+      console.log("fileData", fileData)
+    } catch (error) {
+      console.log("file upload error", error)
 
+    }
   }
-}
-console.log("fileUrlfileUrlfileUrl",fileUrl)
+  console.log("fileUrlfileUrlfileUrl", fileUrl)
   return (
     <>
       <div className="step-card">
         <h4 className="mb-3 text-primary fw-bold">Step 1: Basic Details</h4>
 
-<ProfilePicUpload/>
+        <ProfilePicUpload profileImage={user?.profileImage}/>
         {/* <div className="mb-3">
           <label className="form-label fw-bold">Upload Photo</label>
           <input type="file" className="form-control" multiple onChange={handleFileChange} />
@@ -126,7 +135,7 @@ console.log("fileUrlfileUrlfileUrl",fileUrl)
 
           <div className="col-md-6 mb-3">
             <label className="form-label fw-bold">Verify Mobile Number</label>
-            <input type="text" className="form-control" placeholder="Enter OTP" name="phoneNumber" value={stap1.phoneNumber || "9999"}/>
+            <input type="text" className="form-control" placeholder="Enter OTP" name="phoneNumber" value={stap1.phoneNumber || "9999"} />
           </div>
         </div>
 
@@ -139,9 +148,9 @@ console.log("fileUrlfileUrlfileUrl",fileUrl)
 }
 
 export const Steps2 = () => {
-  const {user,sessionExpired} = useAppSelector(state=>state.auth)
-  const dispatch=useAppDispatch()
-    const router = useRouter()
+  const { user, sessionExpired } = useAppSelector(state => state.auth)
+  const dispatch = useAppDispatch()
+  const router = useRouter()
 
   const [stap2, setStap2] = useState({
     villageCity: "",
@@ -150,7 +159,7 @@ export const Steps2 = () => {
     policeStation: "",
     state: "",
     region: "",
-
+    authSteps: 3
   })
   const handleChange = (e: any) => {
     const { value, name } = e.target
@@ -159,11 +168,13 @@ export const Steps2 = () => {
   const addContactDetails = async () => {
     try {
       const userId = localStorage.getItem("id")
-    
-      const response = await axiosInstanceConfig.post(`/auth/complete-profile/${userId}`, {address:stap2,location:{
-        locationName:"Chainpur",
-        coordinates:[77.2090,28.6139]   //[lang, lat]
-      }})
+
+      const response = await axiosInstanceConfig.post(`/auth/complete-profile/${userId}`, {
+        address: stap2, location: {
+          locationName: "Chainpur",
+          coordinates: [77.2090, 28.6139]   //[lang, lat]
+        }
+      })
       console.log(response, "responseresponse")
       if (response.status == 200) {
         router.push("/complete-profile/term")
@@ -173,22 +184,22 @@ export const Steps2 = () => {
     }
   }
   useEffect(() => {
-  dispatch(loadUserThunk());
-}, [dispatch]);
+    dispatch(loadUserThunk());
+  }, [dispatch]);
 
-useEffect(() => {
-  if (!user) return;
+  useEffect(() => {
+    if (!user) return;
 
-  setStap2((prev) => ({
-    ...prev,
-    villageCity: user?.address?.villageCity,
-    postOffice:user?.address?.postOffice,
-    district:user?.address?.district,
-    policeStation:user?.address?.policeStation,
-    state:user?.address?.state,
-    region:user?.address?.region,
-  }));
-}, [user]);
+    setStap2((prev) => ({
+      ...prev,
+      villageCity: user?.address?.villageCity,
+      postOffice: user?.address?.postOffice,
+      district: user?.address?.district,
+      policeStation: user?.address?.policeStation,
+      state: user?.address?.state,
+      region: user?.address?.region,
+    }));
+  }, [user]);
   return (
     <div className="step-card">
       <h4 className="mb-3 text-primary fw-bold">Step 2: Contact Details</h4>
@@ -245,7 +256,7 @@ useEffect(() => {
         Back
       </button>
 
-      <button className="step-btn float-end" onClick={()=>addContactDetails()} >
+      <button className="step-btn float-end" onClick={() => addContactDetails()} >
         Next
       </button>
     </div>
@@ -253,26 +264,26 @@ useEffect(() => {
 }
 
 export const Steps3 = () => {
-   const {user,sessionExpired} = useAppSelector(state=>state.auth)
-  const dispatch=useAppDispatch()
-    const router = useRouter()
+  const { user, sessionExpired } = useAppSelector(state => state.auth)
+  const dispatch = useAppDispatch()
+  const router = useRouter()
 
   const [isTerm, setIisTerm] = useState(false)
   const handleChange = (e: any) => {
-   const { checked } = e.target;
-   console.log(checked,"checked")
+    const { checked } = e.target;
+    console.log(checked, "checked")
     setIisTerm(checked)
   }
   const addTermHandle = async () => {
     try {
-      if(!isTerm){
+      if (!isTerm) {
         toast.error("Please check term")
         return
-      } 
+      }
       const userId = localStorage.getItem("id")
-    
-      const response = await axiosInstanceConfig.post(`/auth/complete-profile/${userId}`, {isTerm:isTerm})
-      console.log(response, "responseresponse")
+
+      const response = await axiosInstanceConfig.post(`/auth/complete-profile/${userId}`, { isTerm: isTerm, authSteps: 4 })
+      // console.log(response, "responseresponse")
       if (response.status == 200) {
         router.push("/profile")
       }
@@ -281,14 +292,14 @@ export const Steps3 = () => {
     }
   }
   useEffect(() => {
-  dispatch(loadUserThunk());
-}, [dispatch]);
+    dispatch(loadUserThunk());
+  }, [dispatch]);
 
-useEffect(() => {
-  if (!user) return;
+  useEffect(() => {
+    if (!user) return;
 
-  
-}, [user]);
+
+  }, [user]);
   return (
     // <div className="step-card">
 
@@ -332,7 +343,7 @@ useEffect(() => {
 
             <form id="termsForm" >
               <div className="form-check mb-3">
-                <input className="form-check-input"  type="checkbox"  onChange={handleChange} id="acceptCheckbox" aria-describedby="acceptHelp" />
+                <input className="form-check-input" type="checkbox" onChange={handleChange} id="acceptCheckbox" aria-describedby="acceptHelp" />
                 <label className="form-check-label" htmlFor="acceptCheckbox">
                   I accept the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms &amp; Conditions</a> of <span className="fw-bold">SuperSaving Market</span>.
                 </label>

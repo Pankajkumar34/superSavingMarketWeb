@@ -7,6 +7,9 @@ import { useRouter } from "next/navigation";
 import './profile.css';
 import SavingCard from "@/components/savingCard/savinCard";
 import Guideline from "@/components/savingCard/guideLine";
+import { useAppDispatch, useAppSelector } from "@/utils/hooks/hooks";
+import { useEffect } from "react";
+import { getProfile } from "@/lib/thunkApis/authThunks";
 
 const textStyle = {
     textShadow: "1px 1.5px grey",
@@ -15,9 +18,14 @@ const textStyle = {
 
 export default function ProfileContainer() {
     const { data: session } = useSession();
+    const dispatch = useAppDispatch()
+    const {userProfile} = useAppSelector((state) => state.auth);
     const router = useRouter();
     console.log("Profile Container Loaded", session,);
-
+useEffect(()=>{
+    dispatch(getProfile())
+},[dispatch])
+console.log("User Profile Data:", userProfile);
     return (
         <div className="container py-4">
             {/* <!-- Header --> */}
@@ -38,7 +46,7 @@ export default function ProfileContainer() {
 
                             {/* <!-- Profile Image --> */}
                             <div className="me-md-4 mb-3 mb-md-0">
-                                <Image src={session?.user?.image || Userimg}
+                                <Image src={userProfile?.profileImage || Userimg}
                                     alt="Profile Photo"
                                     className="rounded border shadow-sm" width="60" height="60"
                                     style={{ width: "100px", height: "120px", objectFit: "cover" }} />
@@ -46,7 +54,7 @@ export default function ProfileContainer() {
 
                             {/* <!-- Profile Info --> */}
                             <div>
-                                <p className="mb-1"><strong>Name:</strong> {session?.user?.name}</p>
+                                <p className="mb-1"><strong>Name:</strong> {userProfile?.firstName+" "+userProfile?.lastName}</p>
                                 <p className="mb-1"><strong>Parents Franchise:</strong> Super Saving Market</p>
                                 <p className="mb-1"><strong>Account Number:</strong> XXXXXXXXXXXX</p>
                                 <p className="mb-0"><strong>Mobile Number:</strong> +91 7081023366</p>

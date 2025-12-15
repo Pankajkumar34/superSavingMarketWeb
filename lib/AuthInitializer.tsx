@@ -8,8 +8,8 @@ export default function AuthInitializer() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(loadUserThunk()); // runs once on the first render
+    dispatch(loadUserThunk()); 
   }, []);
 
-  return null; // nothing to render
+  return null;
 }

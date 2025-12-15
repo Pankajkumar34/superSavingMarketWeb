@@ -50,7 +50,7 @@ const NavBar = () => {
           {hasRefreshToken ? (
             <Link href="/profile">
             <Image
-              src={session?.user.image || Userimg}
+              src={user?.profileImage || Userimg}
               alt="Profile"
               className="rounded-circle me-3 border border-dark"
               width={40}
